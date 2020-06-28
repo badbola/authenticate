@@ -1,11 +1,14 @@
 //express server
 const express = require('express');
+const cookieParser = require('cookie-parser');
 //port of localhost on which web app will run
 const port = 8000;
-//implementing db in the index
-const db = require('./config/mongoose');
 //assingning all the libraries of express to a const app
 const app = express();
+//implementing db in the index
+const db = require('./config/mongoose');
+app.use(express.urlencoded());
+app.use(cookieParser());
 // implementing express layouts
 const expressLayouts = require('express-ejs-layouts');
 // using express layouts
@@ -18,7 +21,7 @@ app.set('layout extractScripts', true);
 app.set('view engine', 'ejs');
 //assingning folder of ejs files to views
 app.set('views', 'views');
-app.use(express.urlencoded());
+
 
 // for implementing css and js files to web app
 app.use(express.static('assets'));
