@@ -1,10 +1,20 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const saltRounds = 8;
+
+module.exports.profile = function(req,res){
+    return res.render('profile',{title: 'Profile'} );
+}
 module.exports.signIn = function(req,res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
     return res.render('signIn', {title: 'Sign In'});
 }
 module.exports.signUp = function(req,res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
     return res.render('signUp',{title:'Sign Up'});
 }
 
@@ -37,5 +47,5 @@ module.exports.create = function(req,res){
     })
 }
 module.exports.createSession = function(req,res){
-    //TODO
+    return res.redirect('/users/profile');
 }

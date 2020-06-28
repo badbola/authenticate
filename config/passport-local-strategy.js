@@ -1,25 +1,41 @@
 const passport = require('passport');
 
+const bcrypt = require('bcrypt');
+const saltRounds = 8;
 const localStrategy = require('passport-local').Strategy;
 
-const User = require('../models/users');
+const User = require('../models/user');
+var code= '';
 //authinetication using passport
 passport.use(new localStrategy({
     usernameField: 'email',
     },
     function(email,password,done){
         //find user and create identity
+        
         User.findOne({email:email},function(err,user){
             if(err){
                 console.log('Cannot find User');
                 return done(err);
             }
-            if(!user || user.password != password){
-                console.log('Invalid user or Password');
-                return done(null,false);
-            }
+            bcrypt.compare(password,user.password,function(err,isMatch){
+                if(err){
+                    console.log('Error in bcrypt',err);
+                    return done(err);
+                }
+                if(!isMatch){
+                    console.log('Invalid user or Password');
+                    return done(null,false);
+                }
+                else{
+                    return done(null,user);
+                }
+            });
+            // if(!user || user.password != code){
+            //     console.log('Invalid user or Password');
+            //     return done(null,false);
+            // }
 
-            return done(null,user);
         });
     }
 ));
@@ -40,6 +56,20 @@ passport.deserializeUser(function(id,done){
         }
         return done(null,user);
     })
-})
+});
+
+passport.checkAuthentication = function(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    return res.redirect('/users/signin');
+};
+
+passport.setAuthenticatedUser = function(req,res,next){
+    if(req.isAuthenticated()){
+        res.locals.user = req.user;
+    }
+    next();
+}
 
 module.exports = passport;
