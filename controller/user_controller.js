@@ -1,5 +1,6 @@
 const User = require('../models/user');
-
+const bcrypt = require('bcrypt');
+const saltRounds = 8;
 module.exports.signIn = function(req,res){
     return res.render('signIn', {title: 'Sign In'});
 }
@@ -18,13 +19,17 @@ module.exports.create = function(req,res){
             return;
         }
         if(!user){
-            User.create(req.body, function(err,user){
-                if(err){
-                    console.log('error in creating user');
-                    return;
-                }
-                return res.redirect('/users/signin'); 
-            })
+            bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+                // Store hash in your password DB.
+                User.create({email:req.body.email,password:hash, name:req.body.name}, function(err,user){
+                    if(err){
+                        console.log('error in creating user');
+                        return;
+                    }
+                    return res.redirect('/users/signin'); 
+                })
+            });
+            
         }
         else{
             return res.redirect('/users/signup'); 
