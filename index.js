@@ -7,11 +7,22 @@ const port = 8000;
 const app = express();
 //implementing db in the index
 const db = require('./config/mongoose');
+//crete express session
 const session = require('express-session');
+//passport for authentication
 const passport = require('passport');
+//using local strategy
 const passportLocal = require('./config/passport-local-strategy');
+//using google api for login signup
 const paspportGoogle = require('./config/passport-google-oauth2-strategy');
+//store session in database
 const MongoStore = require('connect-mongo')(session);
+//for flash message
+const flash = require('connect-flash');
+const customMware = require('./config/middleware');
+
+
+
 app.use(express.urlencoded());
 app.use(cookieParser());
 // implementing express layouts
@@ -48,7 +59,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(flash());
+app.use(customMware.setFlash);
 
 // for implementing css and js files to web app
 app.use(express.static('assets'));

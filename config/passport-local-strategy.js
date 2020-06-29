@@ -5,17 +5,17 @@ const saltRounds = 8;
 const localStrategy = require('passport-local').Strategy;
 
 const User = require('../models/user');
-var code= '';
 //authinetication using passport
 passport.use(new localStrategy({
     usernameField: 'email',
+    passReqToCallback: true
     },
-    function(email,password,done){
+    function(req,email,password,done){
         //find user and create identity
         
         User.findOne({email:email},function(err,user){
             if(err){
-                console.log('Cannot find User');
+                req.flash('error',err);
                 return done(err);
             }
             bcrypt.compare(password,user.password,function(err,isMatch){
@@ -24,7 +24,7 @@ passport.use(new localStrategy({
                     return done(err);
                 }
                 if(!isMatch){
-                    console.log('Invalid user or Password');
+                    req.flash('error','Invalid Username or Password!');
                     return done(null,false);
                 }
                 else{

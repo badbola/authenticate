@@ -27,7 +27,7 @@ module.exports.signUp = function(req,res){
 
 module.exports.create = function(req,res){
     if(req.body.password != req.body.confirm_password){
-        alert("Password and confirm password did not match");
+        req.flash('error','Password and confirm password are not same!');
         return res.redirect('back');
     }
     User.findOne({email:req.body.email},function(err,user){
