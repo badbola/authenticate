@@ -1,2 +1,7 @@
 <h1>Hey there</h1>
+<% if(locals.user){%>
+    <p><a href="/users/profile/<%= user.id%>"><%= user.name%></a></p>
+    
+    
+<%}%>
         
