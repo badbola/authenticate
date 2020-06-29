@@ -1,5 +1,7 @@
 const User = require('../models/user');
+//bcrypt to hash password before saving it to database
 const bcrypt = require('bcrypt');
+// no of times the hashing will be done
 const saltRounds = 8;
 
 module.exports.profile = function(req,res){
@@ -12,19 +14,21 @@ module.exports.profile = function(req,res){
     })
    
 }
+//for sign in
 module.exports.signIn = function(req,res){
     if(req.isAuthenticated()){
         return res.redirect('/users/profile');
     }
     return res.render('signIn', {title: 'Sign In'});
 }
+//for sign up
 module.exports.signUp = function(req,res){
     if(req.isAuthenticated()){
         return res.redirect('/users/profile');
     }
     return res.render('signUp',{title:'Sign Up'});
 }
-
+// add new user
 module.exports.create = function(req,res){
     if(req.body.password != req.body.confirm_password){
         req.flash('error','Password and confirm password are not same!');
@@ -53,13 +57,16 @@ module.exports.create = function(req,res){
         }
     })
 }
+// create new session
 module.exports.createSession = function(req,res){
     return res.redirect('/');
 }
+//logout
 module.exports.destroySession = function(req,res){
     req.logout();
     return res.redirect('/');
 }
+//password reset
 module.exports.reset = function (req,res) {
     if(req.user.id === req.params.id){
         bcrypt.hash(req.body.password, saltRounds, function(err, hash) {

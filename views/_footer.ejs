@@ -1,1 +1,11 @@
-<h1>Footer</h1>
+<footer>
+    <ul id="footer">
+        <% if(locals.user){%>
+            <li>
+                <a href="/">Authenticator</a>
+            </li>
+        <%}else{%>
+            <h1>Sign in or Sign up to view Test Name</h1>
+        <%}%>
+    </ul>
+</footer>

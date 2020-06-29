@@ -1,7 +1,10 @@
 const passport = require('passport');
+//importing google oauth
 const googleStrategy = require('passport-google-oauth').OAuth2Strategy;
+// importing crrypto to generate raandom password
 const crypto = require('crypto');
 const User= require('../models/user');
+//to hash the password
 const bcrypt = require('bcrypt');
 const saltRounds = 8;
 

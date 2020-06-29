@@ -1,3 +1,4 @@
+//flash message displayed on action
 module.exports.setFlash = function (req,res,next) {
     res.locals.flash = {
         'success': req.flash('success'),

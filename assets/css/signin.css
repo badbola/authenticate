@@ -1,0 +1,33 @@
+
+p>a, i{
+    margin: 5px;
+}
+p{
+    background-color: lightcoral;
+    border-radius: 20px;
+    width: fit-content;
+    padding: 5px;
+}
+#signin{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    height: 100vh;
+}
+form{
+    display: flex;
+    flex-direction: column;
+}
+input{
+    border: none;
+    height: 2rem;
+    width: 20rem;
+    margin: 5px;
+    background-color: black;
+    color: wheat;
+    border-radius: 10px;
+}
+input:focus{
+    outline: none;
+}
