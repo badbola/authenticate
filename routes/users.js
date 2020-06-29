@@ -9,7 +9,7 @@ const userController = require('../controller/user_controller');
 router.get('/signin', userController.signIn);
 router.get('/signup', userController.signUp);
 router.get('/profile',passport.checkAuthentication, userController.profile);
-
+router.get('/signout', userController.destroySession);
 
 router.post('/create', userController.create);
 //use passport as middlware

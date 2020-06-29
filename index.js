@@ -10,6 +10,7 @@ const db = require('./config/mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
+const MongoStore = require('connect-mongo')(session);
 app.use(express.urlencoded());
 app.use(cookieParser());
 // implementing express layouts
@@ -24,7 +25,7 @@ app.set('layout extractScripts', true);
 app.set('view engine', 'ejs');
 //assingning folder of ejs files to views
 app.set('views', 'views');
-
+//mongostore is used too use session cookie
 app.use(session({
     name: 'Authenticator',
     secret: 'hashBrown',
@@ -32,7 +33,16 @@ app.use(session({
     resave: false,
     cookie: {
         maxAge: (1000*60*100)
-    }
+    },
+    store: new MongoStore(
+        {
+        mongooseConnection: db,
+        autoRemove: 'disabled'
+        },
+        function(err){
+            console.log(err || 'connect-mongodb setup ok');
+        }        
+    )
 }));
 
 app.use(passport.initialize());
