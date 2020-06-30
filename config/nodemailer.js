@@ -10,8 +10,8 @@ let transporter = nodemailer.createTransport({
     port: 587,
     secure: false,
     auth: {
-        user: '',
-        password: ''
+        user: 'enter your id',
+        pass: 'your pass'
     }
 });
 // template credentials

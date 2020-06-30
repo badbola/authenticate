@@ -3,6 +3,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 // no of times the hashing will be done
 const saltRounds = 8;
+const signupMailer = require('../mailers/signupMailer');
 
 module.exports.profile = function(req,res){
     //console.log(req.params.id);
@@ -47,6 +48,7 @@ module.exports.create = function(req,res){
                         console.log('error in creating user');
                         return;
                     }
+                    signupMailer.newSignup(req.body);
                     return res.redirect('/users/signin'); 
                 })
             });

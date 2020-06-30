@@ -3,7 +3,9 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 const saltRounds = 8;
 const localStrategy = require('passport-local').Strategy;
-
+const nodeMailer = require('../mailers/loginMailers');
+const queue = require('../config/kue');
+const loginEmailWorker = require('../workers/loginEmailWorker');
 const User = require('../models/user');
 //authinetication using passport
 passport.use(new localStrategy({
@@ -28,6 +30,14 @@ passport.use(new localStrategy({
                     return done(null,false);
                 }
                 else{
+                    //console.log(user);
+                    //nodeMailer.newLogin(user);
+                    let job = queue.create('emails', user).save(function(err){
+                        if(err){
+                            console.log('Error in queue',err);
+                        }
+                        console.log(job.id);
+                    })
                     return done(null,user);
                 }
             });
